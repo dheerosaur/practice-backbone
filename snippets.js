@@ -1,11 +1,23 @@
-var tag = document.createElement('script');
-tag.src = "http://code.jquery.com/jquery.min.js";
-document.getElementsByTagName('head')[0].appendChild(tag);
+(function () {
+  if ( !window.jQuery ) {
+    var s = document.createElement('script');
+    s.setAttribute('src', '//ajax.googleapis.com/ajax/libs/jquery/jquery.min.js');
+    document.body.appendChild(s);
+  }
+})();
 
-var tag = document.createElement('script');
-tag.src = "http://documentcloud.github.com/underscore/underscore.js";
-document.getElementsByTagName('head')[0].appendChild(tag);
+(function () {
+  if ( !window.jQuery ) {
+    var s = document.createElement('script');
+    s.setAttribute('src', '//documentcloud.github.com/backbone/backbone.js');
+    document.body.appendChild(s);
+  }
+})();
 
-var tag = document.createElement('script');
-tag.src = "http://documentcloud.github.com/backbone/backbone.js";
-document.getElementsByTagName('head')[0].appendChild(tag);
+(function () {
+  if ( !window.jQuery ) {
+    var s = document.createElement('script');
+    s.setAttribute('src', '//documentcloud.github.com/underscore/underscore.js');
+    document.body.appendChild(s);
+  }
+})();
