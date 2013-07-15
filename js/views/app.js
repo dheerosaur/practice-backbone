@@ -17,6 +17,7 @@ app.AppView = Backbone.View.extend({
     this.$input = this.$('#new-todo');
     this.$main = this.$('#main');
     this.$footer = this.$('#footer');
+    this.allCheckbox = this.$('#toggle-all')[0];
 
     this.listenTo(app.Todos, 'add', this.addOne);
     this.listenTo(app.Todos, 'reset', this.addAll);
@@ -25,7 +26,7 @@ app.AppView = Backbone.View.extend({
     app.Todos.fetch();
   },
 
-  render: function () {
+  render: function (event) {
     var completed = app.Todos.completed().length;
     var remaining = app.Todos.remaining().length;
 
@@ -43,6 +44,8 @@ app.AppView = Backbone.View.extend({
       this.$main.hide();
       this.$footer.hide();
     }
+
+    this.allCheckbox.checked = !remaining;
   },
 
   addOne: function (todo) {
@@ -69,9 +72,15 @@ app.AppView = Backbone.View.extend({
   },
 
   completeAll: function () {
+    var completed = this.allCheckbox.checked;
+    app.Todos.each(function (todo) {
+      todo.save({completed: completed});
+    });
   },
 
   clearCompleted: function () {
+    _.invoke(app.Todos.completed(), 'destroy');
+    return false;
   }
 
 });
