@@ -5,6 +5,8 @@ app.AppView = Backbone.View.extend({
   // Generally, render method injects data into this
   el: '#todoapp',
 
+  statsTemplate: _.template( $('#stats-template').html() ),
+
   events: {
     'keypress #new-todo':     'createOnEnter',
     'click #toggle-all':      'completeAll',
@@ -13,14 +15,34 @@ app.AppView = Backbone.View.extend({
 
   initialize: function () {
     this.$input = this.$('#new-todo');
+    this.$main = this.$('#main');
+    this.$footer = this.$('#footer');
 
     this.listenTo(app.Todos, 'add', this.addOne);
     this.listenTo(app.Todos, 'reset', this.addAll);
+    this.listenTo(app.Todos, 'all', this.render);
 
     app.Todos.fetch();
   },
 
   render: function () {
+    var completed = app.Todos.completed().length;
+    var remaining = app.Todos.remaining().length;
+
+    if (app.Todos.length) {
+      this.$main.show();
+      this.$footer.show();
+
+      footerHTML = this.statsTemplate({
+        completed: completed,
+        remaining: remaining
+      });
+      this.$footer.html(footerHTML);
+
+    } else {
+      this.$main.hide();
+      this.$footer.hide();
+    }
   },
 
   addOne: function (todo) {
