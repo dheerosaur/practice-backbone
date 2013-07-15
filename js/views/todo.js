@@ -17,6 +17,7 @@ app.TodoView = Backbone.View.extend({
   initialize: function () {
     this.listenTo(this.model, 'change', this.render);
     this.listenTo(this.model, 'destroy', this.remove);
+    this.listenTo(this.model, 'visible', this.toggleVisible);
   },
 
   render: function () {
@@ -36,6 +37,11 @@ app.TodoView = Backbone.View.extend({
 
   isHidden: function () {
     isCompleted = this.model.get('completed');
+    if (app.TodoFilter === 'completed') {
+      return !isCompleted;
+    } else if (app.TodoFilter == 'active') {
+      return isCompleted;
+    }
     return false;
   },
 

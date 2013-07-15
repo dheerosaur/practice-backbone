@@ -23,6 +23,9 @@ app.AppView = Backbone.View.extend({
     this.listenTo(app.Todos, 'reset', this.addAll);
     this.listenTo(app.Todos, 'all', this.render);
 
+    this.listenTo(app.Todos, 'change:completed', this.filterOne);
+    this.listenTo(app.Todos, 'filter', this.filterAll);
+
     app.Todos.fetch();
   },
 
@@ -39,6 +42,10 @@ app.AppView = Backbone.View.extend({
         remaining: remaining
       });
       this.$footer.html(footerHTML);
+
+      this.$('#filters li a').removeClass('selected')
+        .filter('[href="#/' + app.TodoFilter + '"]')
+        .addClass('selected');
 
     } else {
       this.$main.hide();
@@ -81,6 +88,13 @@ app.AppView = Backbone.View.extend({
   clearCompleted: function () {
     _.invoke(app.Todos.completed(), 'destroy');
     return false;
-  }
+  },
 
+  filterOne: function (todo) {
+    todo.trigger('visible');
+  },
+
+  filterAll: function () {
+    app.Todos.each(this.filterOne, this);
+  }
 });
